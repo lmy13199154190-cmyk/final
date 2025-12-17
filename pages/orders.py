@@ -15,7 +15,7 @@ def show(conn):
         if st.button("生成入柜订单"):
             now = datetime.utcnow().isoformat()
             conn.execute("""INSERT INTO orders (order_id,user_id,courier_id,cabinet_id,in_cabinet_time,out_cabinet_time,status,risk_score,distance_actual,distance_expected)
-                            VALUES (?,?,?,?,?,?,?,?,?,?)""",
+                            VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
                          (order_id,user_id,courier_id,3.5,now,now,now,"in",0.0,cabinet_id,2.5))
             conn.commit()
 
@@ -55,6 +55,7 @@ def show(conn):
             st.rerun()
 conn = sqlite3.connect("data.db")
 show(conn)
+
 
 
 
