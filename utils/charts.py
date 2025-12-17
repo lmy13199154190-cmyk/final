@@ -3,33 +3,34 @@ import pandas as pd
 import plotly.express as px
 from dateutil import parser
 
-def orders_df(rows):
-    cols = [
-        "id",
-        "order_id",
-        "user_id",
-        "courier_id",
-        "cabinet_id",
-        "in_cabinet_time",
-        "out_cabinet_time",
-        "status",
-        "risk",
-        "camera_suspicious",
-        "pickup_process",
-        "face_match",
-        "cabinet_leave_time",
-        "distance_expected",
-        "distance_actual",
-        "pickup_time",
-        "finish_time",
-        "gps_jumps",
-        "photo_ok",
-        "notes",
-        "other_col1",
-        "other_col2"
-    ]
+# 修改 dashboard.py 中的查询语句
+# pages/dashboard.py
 
-    return pd.DataFrame(rows, columns=cols)
+def show(conn):
+    st.title("仪表盘")
+    
+    # 只查询实际存在的列（18列）
+    rows = query(conn, """
+    SELECT 
+        id, order_id, user_id, courier_id, 
+        cabinet_id, in_cabinet_time, out_cabinet_time, 
+        status, risk, camera_suspicious, pickup_process, 
+        face_match, cabinet_leave_time, distance_expected, 
+        distance_actual, pickup_time, finish_time, gps_jumps
+    FROM orders 
+    ORDER BY id DESC
+    """, fetch=True)
+    
+    # 然后定义对应的18列
+    cols_18 = [
+        "id", "order_id", "user_id", "courier_id",
+        "cabinet_id", "in_cabinet_time", "out_cabinet_time",
+        "status", "risk", "camera_suspicious", "pickup_process",
+        "face_match", "cabinet_leave_time", "distance_expected",
+        "distance_actual", "pickup_time", "finish_time", "gps_jumps"
+    ]
+    
+    df = pd.DataFrame(rows, columns=cols_18)
 
 def plot_risk_time_distribution(df):
     if df.empty:
@@ -45,4 +46,5 @@ def plot_cabinet_heatmap(df):
         return None
     agg = df.groupby("cabinet_id")["risk"].sum().reset_index()
     fig = px.bar(agg, x="cabinet_id", y="risk", title="按柜子汇总的风险得分")
+
     return fig
