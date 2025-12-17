@@ -28,10 +28,10 @@ def init_orders_table(conn):
 def show(conn):
     st.title("订单管理")
     with st.expander("新增模拟订单（用于演示）"):
-        order_id = st.text_input("Order ID", value=f"order_{int(datetime.utcnow().timestamp())}",key="order_id_input")
-        user_id = st.text_input("用户ID", value="user1",key="user_id_input")
-        courier_id = st.text_input("配送员ID", value="courier1",key="courier_id_input")
-        cabinet_id = st.text_input("柜子编号", value="3.2",key="cabinet_id_input")
+        order_id = st.text_input("Order ID", value=f"order_{int(datetime.utcnow().timestamp())}",key="new_order_id" )
+        user_id = st.text_input("用户ID", value="user1",key="new_user_id")
+        courier_id = st.text_input("配送员ID", value="courier1",key="new_courier_id")
+        cabinet_id = st.text_input("柜子编号", value="3.2",key="new_cabinet_id")
         if st.button("生成入柜订单"):
             now = datetime.utcnow().isoformat()
             conn.execute("""INSERT INTO orders (order_id,user_id,courier_id,cabinet_id,in_cabinet_time,out_cabinet_time,status,risk_score,distance_actual,distance_expected)
@@ -79,8 +79,7 @@ init_orders_table(conn)
 show(conn)
 
 
-conn = sqlite3.connect("data.db")
-show(conn)
+
 
 
 
