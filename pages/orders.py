@@ -49,10 +49,11 @@ def show(conn):
                 "notes": row[11] if row[11] else ""
             }
             score = compute_risk(order)
-            conn.execute("UPDATE orders SET risk_score=? WHERE id=?", (score, r[0]))
+            conn.execute("UPDATE orders SET risk=? WHERE id=?", (score, r[0]))
             conn.commit()
             st.success(f"风险评分更新为 {score:.2f}")
             st.rerun()
 conn = sqlite3.connect("data.db")
 show(conn)
+
 
