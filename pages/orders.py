@@ -36,7 +36,7 @@ def show(conn):
             now = datetime.utcnow().isoformat()
             conn.execute("""INSERT INTO orders (order_id,user_id,courier_id,cabinet_id,in_cabinet_time,out_cabinet_time,status,risk_score,distance_actual,distance_expected)
                             VALUES (?,?,?,?,?,?,?,?,?,?)""",
-                         (order_id,user_id,courier_id,3.5,cabinet_id,now,None,"in",0.0,3.5,2.5))
+                         (order_id,user_id,courier_id,cabinet_id,now,None,"in",0.0,3.5,2.5))
             conn.commit()
 
 
@@ -77,6 +77,7 @@ def show(conn):
 conn = sqlite3.connect("data.db", check_same_thread=False)
 init_orders_table(conn)
 show(conn)
+
 
 
 
