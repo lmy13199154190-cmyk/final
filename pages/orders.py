@@ -5,6 +5,26 @@ from utils.risk import compute_risk
 from datetime import datetime
 import sqlite3
 
+def init_orders_table(conn):
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id TEXT,
+        user_id TEXT,
+        courier_id TEXT,
+        cabinet_id TEXT,
+        in_cabinet_time TEXT,
+        out_cabinet_time TEXT,
+        status TEXT,
+        risk_score REAL,
+        distance_actual REAL,
+        distance_expected REAL,
+        notes TEXT
+    )
+    """)
+    conn.commit()
+
+
 def show(conn):
     st.title("订单管理")
     with st.expander("新增模拟订单（用于演示）"):
@@ -53,8 +73,15 @@ def show(conn):
             conn.commit()
             st.success(f"风险评分更新为 {score:.2f}")
             st.rerun()
+            
+conn = sqlite3.connect("data.db", check_same_thread=False)
+init_orders_table(conn)
+show(conn)
+
+
 conn = sqlite3.connect("data.db")
 show(conn)
+
 
 
 
