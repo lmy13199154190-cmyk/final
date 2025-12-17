@@ -1,6 +1,6 @@
 import sqlite3
 import hashlib
-from datetime import datetime
+from datetime import datetime,timezone
 
 DB_PATH = "data.db"   # 你项目的数据库文件名
 
@@ -34,27 +34,25 @@ def init_db():
     # 2. 订单表
     cur.execute("""
     CREATE TABLE IF NOT EXISTS orders (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_id TEXT UNIQUE,
-    user_id INTEGER,
-    courier_id INTEGER,
-    cabinet_id INTEGER,
-    order_time TIMESTAMP,
-    delivery_time TIMESTAMP,
-    in_cabinet_time TIMESTAMP,
-     out_cabinet_time TIMESTAMP,
-    status TEXT,
-    risk_score REAL DEFAULT 0,
-    notes TEXT,
-    
-    
-    distance_expected REAL,
-    distance_actual REAL,
-    pickup_time TIMESTAMP,
-    finish_time TIMESTAMP,
-    gps_jumps INTEGER,
-    photo_ok INTEGER DEFAULT 1
-
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id TEXT UNIQUE,
+        user_id INTEGER,
+        courier_id INTEGER,
+        cabinet_id INTEGER,
+        order_time TIMESTAMP,
+        delivery_time TIMESTAMP,
+        in_cabinet_time TIMESTAMP,
+        out_cabinet_time TIMESTAMP,
+        status TEXT,
+        risk_score REAL DEFAULT 0,
+        notes TEXT,
+        distance_expected REAL,
+        distance_actual REAL,
+        pickup_time TIMESTAMP,
+        finish_time TIMESTAMP,
+        gps_jumps INTEGER,
+        photo_ok INTEGER DEFAULT 1
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     );
     """)
@@ -104,3 +102,4 @@ def query(conn, sql, params=(), fetch=False):
     conn.commit()
     if fetch:
         return cur.fetchall()
+
